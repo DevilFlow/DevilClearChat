@@ -6,6 +6,7 @@
 
 */
 
+//CHANGE YOUR COMMAND HERE
 const CLEAR_MESSAGES = '!clearMessages';
 
 const Discord = require('discord.js');
