@@ -1,7 +1,7 @@
 /*
   A bot to clear/delete messages of a channel
 
-  Usage: !clearchat  ==> clears all messages of
+  Usage: !clearMessages  ==> clears all messages of
   that channel on which the command was run
 
 */
@@ -9,34 +9,25 @@
 const CLEAR_MESSAGES = '!clearchat';
 
 const Discord = require('discord.js');
-const clearchat = new Discord.Client();
+const bot = new Discord.Client();
 
 // Token of my bot
 const token = 'YOUR_TOKEN_HERE';
 
-clearchat.on('ready', () => {
-// Set the client user's status
-  clearchat.user.setStatus('available')
-  clearchat.user.setActivity(CLEAR_MESSAGES, { type: 'PLAYING' })
-  .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))
-  .catch(console.error);
-  var servercount = clearchat.guilds.size;
-  var usercount = clearchat.users.size;
-  var channelsize = clearchat.channels.size;
-  console.log("The Server is currently running on " + servercount + " Server(s) with " + usercount + " users and " + channelsize +" channels.");
+bot.on('ready', () => {
   console.log('ClearMessagesBot is Ready!');
-  clearchat.on('message', message => {
+  bot.on('message', message => {
     if (message.content == CLEAR_MESSAGES) {
 
       // Check the following permissions before deleting messages:
       //    1. Check if the user has enough permissions
-     //    2. Check if I have the permission to execute the command
+      //    2. Check if I have the permission to execute the command
 
       if (!message.channel.permissionsFor(message.author).hasPermission("MANAGE_MESSAGES")) {
         message.channel.sendMessage("Sorry, you don't have the permission to execute the command \""+message.content+"\"");
         console.log("Sorry, you don't have the permission to execute the command \""+message.content+"\"");
         return;
-      } else if (!message.channel.permissionsFor(clearchat.user).hasPermission("MANAGE_MESSAGES")) {
+      } else if (!message.channel.permissionsFor(bot.user).hasPermission("MANAGE_MESSAGES")) {
         message.channel.sendMessage("Sorry, I don't have the permission to execute the command \""+message.content+"\"");
         console.log("Sorry, I don't have the permission to execute the command \""+message.content+"\"");
         return;
@@ -48,12 +39,11 @@ clearchat.on('ready', () => {
         message.channel.fetchMessages()
           .then(messages => {
             message.channel.bulkDelete(messages);
-            var messagesDeleted = 0
             messagesDeleted = messages.array().length; // number of messages deleted
 
             // Logging the number of messages deleted on both the channel and console.
-            message.channel.sendMessage("Deletion of messages successful. Total messages deleted: "+ messagesDeleted);
-            console.log('Deletion of messages successful. Total messages deleted: '+ messagesDeleted)
+            message.channel.sendMessage("Deletion of messages successful. Total messages deleted: "+messagesDeleted);
+            console.log('Deletion of messages successful. Total messages deleted: '+messagesDeleted)
           })
           .catch(err => {
             console.log('Error while doing Bulk Delete');
@@ -65,4 +55,4 @@ clearchat.on('ready', () => {
 });
 
 
-clearchat.login(token);
+bot.login(token);
